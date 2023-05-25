@@ -130,11 +130,11 @@ class Network(object):
         The function should return a tuple of two lists (db, dw) 
 
         as described in the assignment pdf. """
-
-        pass
+        vs, zs = self.forward_pass(x)
+        return self.backward_pass(vs, zs, y)
 
     def forward_pass(self, x):
-        """
+        """ !!!!!! update doc since I added x, vector of 0 to zs, vs !!!!!!!!!!!!
         Returns vectors vs and zs where each entry are the v and z values of the neurons
         in the layer = index + 1 (layer 0 is the input so computation is not needed for it).
         The z values for the last layer are computed despite they are not needed. !!!!!!!!!!!!!!!
@@ -143,18 +143,64 @@ class Network(object):
         vs = []
         zs = []
 
-        updated_v = []
+        updated_v = np.zeros(x.shape)
         updated_z = np.array(x)
+        vs.append(updated_v)
+        zs.append(updated_z)
         for layer in range(self.num_layers - 1): # don't have biases and weights for first layer
-            updated_v = np.dot(self.weights[layer], updated_z) + self.biases[layer]
+            # updated_v = np.dot(self.weights[layer], updated_z) + self.biases[layer]
+            updated_v = self.weights[layer] @ updated_z + self.biases[layer]
             vs.append(updated_v)
             updated_z = relu(updated_v)
             zs.append(updated_z)
         return vs, zs
     
-    def backward_pass(self, ):
+    def backward_pass(self, vs, zs, y):
+        """
+        Implements backward pass stage of back propagation.
+        Returns db, dw as required in backprop
+        """
+        db = [None] * (self.num_layers - 1)
+        dw = [None] * (self.num_layers - 1)
+        
+        # !!!!!!!!!!!!!!! DELETE
+        vls = vs[1:]
+        zls = zs
+        dws = []
+        dbs = []
 
-        pass
+        db_cur = self.loss_derivative_wr_output_activations(vls[-1], y)
+        dbs.append(db_cur)
+        for l in range(self.num_layers - 2, 0, -1):
+            db_cur = (self.weights[l].T @ dbs[0]) * relu_derivative(vls[l - 1])
+            dbs.insert(0, db_cur)
+
+        for l in range(self.num_layers - 1):
+            dw_cur = dbs[l] @ zls[l].T
+            dws.append(dw_cur)
+
+        return dbs, dws
+        # !!!!!!!!!!!!!!! DELETE
+        # original code:
+        # max_layer_indx = len(vs) - 1
+        # assert max_layer_indx - 1 == len(dw) - 1, "Something is wrong with the indexes" # !!!!! for debug
+        # delta = self.loss_derivative_wr_output_activations(vs[-1], y)
+        # for layer in range(max_layer_indx, 0, -1): #!!!!! does not reach 0
+        #     # index for vs,zs is adapted to index - 1 for dw (vs,zs are shifted)
+        #     if layer == max_layer_indx: # last layer has the identity as its activation function
+        #         # dw[layer - 1] = np.dot(delta, (zs[layer - 1]).T)
+        #         dw[layer - 1] = delta @ (zs[layer - 1]).T
+        #         db[layer - 1] = delta
+        #     else:
+        #         common = np.multiply(delta, relu_derivative(vs[layer]))
+        #         # dw[layer - 1] = np.dot(common, (zs[layer - 1]).T)
+        #         dw[layer - 1] = common @ (zs[layer - 1]).T
+        #         db[layer - 1] = common
+        #     # delta = np.dot((self.weights[layer - 1]).T, np.multiply(relu_derivative(vs[layer]), delta))
+        #     delta = (self.weights[layer - 1]).T @ np.multiply(relu_derivative(vs[layer]), delta)
+
+        # return db, dw
+
 
     def one_label_accuracy(self, data):
 
@@ -231,10 +277,8 @@ class Network(object):
 
 
     def loss_derivative_wr_output_activations(self, output_activations, y):
-
-        #TODO: Implement derivative of loss with respect to the output activations before softmax
-
-        return 1
+        """Implements derivative of loss with respect to the output activations before softmax"""        
+        return softmax(output_activations) - y
 
 
 
@@ -243,7 +287,7 @@ class Network(object):
 def relu(z):
     """Implements the relu function activation on each element in z."""
 
-    return np.maximum(0,z)
+    return np.maximum(0,np.array(z))
 
 
 
