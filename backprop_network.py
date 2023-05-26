@@ -163,45 +163,20 @@ class Network(object):
         db = [None] * (self.num_layers - 1)
         dw = [None] * (self.num_layers - 1)
         
-        # !!!!!!!!!!!!!!! DELETE
-        # vls = vs[1:]
-        # zls = zs
-        # dws = []
-        # dbs = []
-
-        # db_cur = self.loss_derivative_wr_output_activations(vls[-1], y)
-        # dbs.append(db_cur)
-        # for l in range(self.num_layers - 2, 0, -1):
-        #     db_cur = (self.weights[l].T @ dbs[0]) * relu_derivative(vls[l - 1])
-        #     dbs.insert(0, db_cur)
-
-        # for l in range(self.num_layers - 1):
-        #     dw_cur = dbs[l] @ zls[l].T
-        #     dws.append(dw_cur)
-
-        # return dbs, dws
-        # !!!!!!!!!!!!!!! DELETE
-        # original code:
         max_layer_indx = len(vs) - 1
-        # print(f"{max_layer_indx=}, {len(dw)=}, {len(zs)=}, {len(vs)=}")
         assert max_layer_indx - 1 == len(dw) - 1, "Something is wrong with the indexes" # !!!!! for debug
         delta = self.loss_derivative_wr_output_activations(vs[-1], y)
-        for layer in range(max_layer_indx, 0, -1): #!!!!! does not reach 0
-            # print(f"In loop, {layer=}")
+        for layer in range(max_layer_indx, 0, -1):
             # index for vs,zs is adapted to index - 1 for dw (vs,zs are shifted)
+
             if layer == max_layer_indx: # last layer has the identity as its activation function
-                # dw[layer - 1] = np.dot(delta, (zs[layer - 1]).T)
-                dw[layer - 1] = delta @ (zs[layer - 1]).T
-                db[layer - 1] = delta
-                delta = (self.weights[layer - 1]).T @ delta # Added
+                common = delta
             else:
                 common = np.multiply(delta, relu_derivative(vs[layer]))
-                # dw[layer - 1] = np.dot(common, (zs[layer - 1]).T)
-                dw[layer - 1] = common @ (zs[layer - 1]).T
-                db[layer - 1] = common
-                delta = (self.weights[layer - 1]).T @ np.multiply(relu_derivative(vs[layer]), delta) # Added
-            # delta = np.dot((self.weights[layer - 1]).T, np.multiply(relu_derivative(vs[layer]), delta))
-            # delta = (self.weights[layer - 1]).T @ np.multiply(relu_derivative(vs[layer]), delta)
+
+            dw[layer - 1] = common @ (zs[layer - 1]).T
+            db[layer - 1] = common
+            delta = (self.weights[layer - 1]).T @ common
 
         return db, dw
 
