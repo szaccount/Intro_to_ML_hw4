@@ -56,7 +56,7 @@ class Network(object):
 
     def SGD(self, training_data, epochs, mini_batch_size, learning_rate,
 
-            test_data):
+            test_data, statistics=True):
 
         """Train the neural network using mini-batch stochastic
 
@@ -69,6 +69,14 @@ class Network(object):
         print("Initial test accuracy: {0}".format(self.one_label_accuracy(test_data)))
 
         n = len(training_data)
+
+        # ADDED
+        if statistics:
+            epoch_options = []
+            test_acc_results = []
+            training_acc_results = []
+            training_loss_results = []
+        # ADDED
 
         for j in range(epochs):
 
@@ -84,7 +92,20 @@ class Network(object):
 
                 self.update_mini_batch(mini_batch, learning_rate)
 
-            print ("Epoch {0} test accuracy: {1}".format(j, self.one_label_accuracy(test_data)))
+            # ADDED
+            test_accuracy = self.one_label_accuracy(test_data)
+            if statistics:
+                epoch_options.append(j)
+                test_acc_results.append(test_accuracy)
+                training_acc = self.one_hot_accuracy(training_data)
+                training_acc_results.append(training_acc)
+                training_loss = self.loss(training_data)
+                training_loss_results.append(training_loss)
+            #ADDED
+            print ("Epoch {0} test accuracy: {1}".format(j, test_accuracy))
+        
+        if statistics:
+            return epoch_options, test_acc_results, training_acc_results, training_loss_results
 
 
 
