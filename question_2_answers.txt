@@ -1,0 +1,102 @@
+Question 2:
+
+subsection a:
+With default parameters and SGD:
+Epoch [1/10], Step [71/71], Loss: 2.1816
+Accuracy of the network on the 5000 validation images: 27.04 %
+Epoch [2/10], Step [71/71], Loss: 1.8492
+Accuracy of the network on the 5000 validation images: 29.46 %
+Epoch [3/10], Step [71/71], Loss: 1.6597
+Accuracy of the network on the 5000 validation images: 37.68 %
+Epoch [4/10], Step [71/71], Loss: 1.5216
+Accuracy of the network on the 5000 validation images: 37.88 %
+Epoch [5/10], Step [71/71], Loss: 1.4302
+Accuracy of the network on the 5000 validation images: 39.78 %
+Epoch [6/10], Step [71/71], Loss: 1.3624
+Accuracy of the network on the 5000 validation images: 42.46 %
+Epoch [7/10], Step [71/71], Loss: 1.2959
+Accuracy of the network on the 5000 validation images: 44.86 %
+Epoch [8/10], Step [71/71], Loss: 1.2341
+Accuracy of the network on the 5000 validation images: 44.22 %
+Epoch [9/10], Step [71/71], Loss: 1.1758
+Accuracy of the network on the 5000 validation images: 48.6 %
+Epoch [10/10], Step [71/71], Loss: 1.1255
+Accuracy of the network on the 5000 validation images: 47.74 %
+
+with Adam optimizer and learning rate 0.00005:
+Epoch [1/10], Step [71/71], Loss: 1.8957
+Accuracy of the network on the 5000 validation images: 40.02 %
+Epoch [2/10], Step [71/71], Loss: 1.4970
+Accuracy of the network on the 5000 validation images: 42.28 %
+Epoch [3/10], Step [71/71], Loss: 1.3480
+Accuracy of the network on the 5000 validation images: 49.22 %
+Epoch [4/10], Step [71/71], Loss: 1.1995
+Accuracy of the network on the 5000 validation images: 51.76 %
+Epoch [5/10], Step [71/71], Loss: 1.0608
+Accuracy of the network on the 5000 validation images: 56.14 %
+Epoch [6/10], Step [71/71], Loss: 0.9662
+Accuracy of the network on the 5000 validation images: 56.36 %
+Epoch [7/10], Step [71/71], Loss: 0.8660
+Accuracy of the network on the 5000 validation images: 57.52 %
+Epoch [8/10], Step [71/71], Loss: 0.7536
+Accuracy of the network on the 5000 validation images: 59.64 %
+Epoch [9/10], Step [71/71], Loss: 0.6935
+Accuracy of the network on the 5000 validation images: 60.5 %
+Epoch [10/10], Step [71/71], Loss: 0.6001
+Accuracy of the network on the 5000 validation images: 58.88 %
+
+Adam achieves better training loss (1.1255 in SGD last epoch vs 0.6001 of Adam)
+Also, the validation accuracy is better with Adam (58.88% vs 47.74% of SGD in last epoch)
+
+subsection b:
+Epoch [1/10], Step [71/71], Loss: 18.9151
+Accuracy of the network on the 5000 validation images: 11.22 %
+Epoch [2/10], Step [71/71], Loss: 2.3202
+Accuracy of the network on the 5000 validation images: 10.26 %
+Epoch [3/10], Step [71/71], Loss: 2.3463
+Accuracy of the network on the 5000 validation images: 10.16 %
+Epoch [4/10], Step [71/71], Loss: 2.3084
+Accuracy of the network on the 5000 validation images: 10.36 %
+Epoch [5/10], Step [71/71], Loss: 2.3135
+Accuracy of the network on the 5000 validation images: 10.24 %
+Epoch [6/10], Step [71/71], Loss: 2.3602
+Accuracy of the network on the 5000 validation images: 10.3 %
+Epoch [7/10], Step [71/71], Loss: 2.3066
+Accuracy of the network on the 5000 validation images: 10.32 %
+Epoch [8/10], Step [71/71], Loss: 2.3256
+Accuracy of the network on the 5000 validation images: 10.3 %
+Epoch [9/10], Step [71/71], Loss: 2.3189
+Accuracy of the network on the 5000 validation images: 10.3 %
+Epoch [10/10], Step [71/71], Loss: 2.3030
+Accuracy of the network on the 5000 validation images: 10.3 %
+
+The loss increased greatly for running Adam with learning rate 0.005 (2.303 vs 0.6001 before, in last epoch)
+Also the accuracy of validation dropped down to 10.3% in last epoch compared to 58.88% before.
+
+subsection c:
+Epoch [1/10], Step [71/71], Loss: 2.0434
+Accuracy of the network on the 5000 validation images: 33.12 %
+Epoch [2/10], Step [71/71], Loss: 1.7415
+Accuracy of the network on the 5000 validation images: 39.24 %
+Epoch [3/10], Step [71/71], Loss: 1.5928
+Accuracy of the network on the 5000 validation images: 40.12 %
+Epoch [4/10], Step [71/71], Loss: 1.5100
+Accuracy of the network on the 5000 validation images: 45.58 %
+Epoch [5/10], Step [71/71], Loss: 1.4106
+Accuracy of the network on the 5000 validation images: 43.98 %
+Epoch [6/10], Step [71/71], Loss: 1.3400
+Accuracy of the network on the 5000 validation images: 46.76 %
+Epoch [7/10], Step [71/71], Loss: 1.2479
+Accuracy of the network on the 5000 validation images: 50.94 %
+Epoch [8/10], Step [71/71], Loss: 1.1653
+Accuracy of the network on the 5000 validation images: 50.82 %
+Epoch [9/10], Step [71/71], Loss: 1.0591
+Accuracy of the network on the 5000 validation images: 52.24 %
+Epoch [10/10], Step [71/71], Loss: 0.9611
+Accuracy of the network on the 5000 validation images: 51.24 %
+
+The training loss is now bigger (0.9611 vs 0.6001) and the accuracy smaller (51.24% vs 58.88%)
+Seems the additions accelerate the learning.
+
+without batch and dropout took 3m39s
+with took 3m57s (without batch and dropout was slightly faster)
