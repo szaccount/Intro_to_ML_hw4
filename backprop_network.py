@@ -155,10 +155,10 @@ class Network(object):
         return self.backward_pass(vs, zs, y)
 
     def forward_pass(self, x):
-        """ !!!!!! update doc since I added x, vector of 0 to zs, vs !!!!!!!!!!!!
+        """
         Returns vectors vs and zs where each entry are the v and z values of the neurons
-        in the layer = index + 1 (layer 0 is the input so computation is not needed for it).
-        The z values for the last layer are computed despite they are not needed. !!!!!!!!!!!!!!!
+        in the layer (for layer vs gets 0 and zs gets x).
+        The z values for the last layer are computed despite they are not needed.
         Softmax is not considered as its part of the loss function (as instructed).
         """
         vs = []
@@ -169,7 +169,6 @@ class Network(object):
         vs.append(updated_v)
         zs.append(updated_z)
         for layer in range(self.num_layers - 1): # don't have biases and weights for first layer
-            # updated_v = np.dot(self.weights[layer], updated_z) + self.biases[layer]
             updated_v = self.weights[layer] @ updated_z + self.biases[layer]
             vs.append(updated_v)
             updated_z = relu(updated_v)
@@ -185,7 +184,7 @@ class Network(object):
         dw = [None] * (self.num_layers - 1)
         
         max_layer_indx = len(vs) - 1
-        assert max_layer_indx - 1 == len(dw) - 1, "Something is wrong with the indexes" # !!!!! for debug
+        assert max_layer_indx - 1 == len(dw) - 1, "Something is wrong with the indexes"
         delta = self.loss_derivative_wr_output_activations(vs[-1], y)
         for layer in range(max_layer_indx, 0, -1):
             # index for vs,zs is adapted to index - 1 for dw (vs,zs are shifted)
@@ -301,6 +300,6 @@ def relu_derivative(z):
     res[res>=0] = 1
     res[res<0] = 0
 
-    return res  # !!!!!!! maybe need to define the derivative to be 0 also at 0
+    return res
     
 
